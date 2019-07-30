@@ -80,11 +80,16 @@ export default {
         /* eslint-disable */
         axios.post('http://localhost:8888/api/private/v1/login', this.loginForm).then(res => {
           console.log(res);
+          console.log(res.data.data.token)
+
           if (res.data.meta.status == 200) {
+            localStorage.setItem('token', res.data.data.token)
+
             this.$message({
               message: '登录成功',
               type: 'success',
               duration: 800
+
 
             })
             this.$router.push('/home')
