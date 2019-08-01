@@ -40,7 +40,6 @@
 
 <script>
 
-import axios from 'axios'
 export default {
   data () {
     return {
@@ -78,7 +77,7 @@ export default {
         //   return
         // }
         /* eslint-disable */
-        axios.post('http://localhost:8888/api/private/v1/login', this.loginForm).then(res => {
+        this.$axios.post('login', this.loginForm).then(res => {
           console.log(res);
           console.log(res.data.data.token)
 
