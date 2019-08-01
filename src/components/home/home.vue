@@ -88,12 +88,13 @@
 <script>
 export default {
   methods: {
-    loginout () {
-      this.$confirm('此操作将退出该账户, 是否继续?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(() => {
+    async loginout () {
+      try {
+        await this.$confirm('此操作将退出该账户, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        })
         localStorage.removeItem('token')
         this.$message({
           type: 'success',
@@ -102,14 +103,39 @@ export default {
 
         })
         this.$router.push('/login')
-      }).catch(() => {
+      } catch (error) {
         this.$message({
           message: '取消退出',
           /* eslint-disable */
           type: 'info'
 
         })
-      })
+      }
+
+
+
+
+      // this.$confirm('此操作将退出该账户, 是否继续?', '提示', {
+      //   confirmButtonText: '确定',
+      //   cancelButtonText: '取消',
+      //   type: 'warning'
+      // }).then(() => {
+      //   localStorage.removeItem('token')
+      //   this.$message({
+      //     type: 'success',
+      //     message: '退出成功!',
+      //     duration: 800
+
+      //   })
+      //   this.$router.push('/login')
+      // }).catch(() => {
+      //   this.$message({
+      //     message: '取消退出',
+      //     /* eslint-disable */
+      //     type: 'info'
+
+      //   })
+      // })
     },
     handUrlPath () {
       return this.$route.path

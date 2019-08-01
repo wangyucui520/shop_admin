@@ -65,27 +65,32 @@ export default {
   },
   methods: {
     // 渲染列表
-    getUserName(pagenum = 1, query = '') {
-      this.$axios
-        .get('users', {
-          params: {
-            // 查询参数
-            query,
-            // 当前页码
-            pagenum,
-            //	每页显示条数
-            pagesize: 2
-          }
-        })
-        .then(res => {
-          console.log(res)
-          console.log(res.data.data.users)
-          // 保存列表数据
-          this.tableData = res.data.data.users
-          this.total = res.data.data.total
-          // 每页条数
-          this.pagenum = res.data.data.pagenum
-        })
+    async getUserName(pagenum = 1, query = '') {
+      let res = await this.$axios.get('users', {
+        params: {
+          // 查询参数
+          query,
+          // 当前页码
+          pagenum,
+          //	每页显示条数
+          pagesize: 2
+        }
+      })
+      this.tableData = res.data.data.users
+      this.total = res.data.data.total
+      //   // 每页条数
+      this.pagenum = res.data.data.pagenum
+      // console.log(res)
+
+      // .then(res => {
+      //   console.log(res)
+      //   console.log(res.data.data.users)
+      //   // 保存列表数据
+      //   this.tableData = res.data.data.users
+      //   this.total = res.data.data.total
+      //   // 每页条数
+      //   this.pagenum = res.data.data.pagenum
+      // })
     },
     // 分页
     curentPageChange(a) {
@@ -93,7 +98,7 @@ export default {
       this.getUserName(a, this.input3)
     },
     search() {
-      console.log(this.input3)
+      // console.log(this.input3)
       this.getUserName(1, this.input3)
     },
     // 显示模态框
@@ -101,21 +106,33 @@ export default {
       this.dialogaddVisible = true
     },
     // 添加用户
-    addUser() {
-      this.$axios.post('users', this.addForm, {}).then(res => {
-        console.log(res)
-        if (res.data.meta.status == 201) {
-          this.$message({
-            message: '添加成功',
-            type: 'success',
-            duration: 800
-          })
-          // 关闭对话框
-          this.dialogaddVisible = false
-          // 重新刷新
-          this.getUserName(1)
-        }
-      })
+    async addUser() {
+      let res = await this.$axios.post('users', this.addForm, {})
+      if (res.data.meta.status == 201) {
+        this.$message({
+          message: '添加成功',
+          type: 'success',
+          duration: 800
+        })
+        // 关闭对话框
+        this.dialogaddVisible = false
+        // 重新刷新
+        this.getUserName(1)
+      }
+      // .then(res => {
+      // console.log(res)
+      // if (res.data.meta.status == 201) {
+      //   this.$message({
+      //     message: '添加成功',
+      //     type: 'success',
+      //     duration: 800
+      //   })
+      //   // 关闭对话框
+      //   this.dialogaddVisible = false
+      //   // 重新刷新
+      //   this.getUserName(1)
+      // }
+      // })
     },
     // 关闭对话框的回调
     closeDialog() {
@@ -123,34 +140,50 @@ export default {
       this.$refs.addModel.resetFields()
     },
     // 删除其中一项
-    delContent(id) {
+    async delContent(id) {
       console.log(id)
-      this.$axios.delete(`users/${id}`, {}).then(res => {
-        console.log(res)
-        if (res.data.meta.status === 200) {
-          this.$message({
-            message: '删除成功',
-            type: 'success',
-            duration: 800
-          })
-        }
-      })
+      let res = await this.$axios.delete(`users/${id}`)
+      if (res.data.meta.status === 200) {
+        this.$message({
+          message: '删除成功',
+          type: 'success',
+          duration: 800
+        })
+      }
+      //  .then(res => {
+      //   console.log(res)
+      //   if (res.data.meta.status === 200) {
+      //     this.$message({
+      //       message: '删除成功',
+      //       type: 'success',
+      //       duration: 800
+      //     })
+      //   }
+      // })
       this.getUserName()
     },
     // 改变状态
-    statusChange(row) {
+    async statusChange(row) {
       // console.log(1)
       const { id, mg_state } = row
-      this.$axios.put(`users/${id}/state/${mg_state}`, null, {}).then(res => {
-        console.log(res)
-        if (res.data.meta.status === 200) {
-          this.$message({
-            message: '设置状态成功',
-            type: 'success',
-            duration: 800
-          })
-        }
-      })
+      let res = await this.$axios.put(`users/${id}/state/${mg_state}`)
+      if (res.data.meta.status === 200) {
+        this.$message({
+          message: '设置状态成功',
+          type: 'success',
+          duration: 800
+        })
+      }
+      //  .then(res => {
+      //   console.log(res)
+      //   if (res.data.meta.status === 200) {
+      //     this.$message({
+      //       message: '设置状态成功',
+      //       type: 'success',
+      //       duration: 800
+      //     })
+      //   }
+      // })
     }
   }
 }

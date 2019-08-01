@@ -66,7 +66,7 @@ export default {
   methods: {
     //  eslint-disable
     startLogin () {
-      this.$refs.loginForm.validate((valid) => {
+      this.$refs.loginForm.validate(async (valid) => {
         // if (!valid) {
         //   this.$message({
         //     message: '校验失败',
@@ -77,30 +77,50 @@ export default {
         //   return
         // }
         /* eslint-disable */
-        this.$axios.post('login', this.loginForm).then(res => {
-          console.log(res);
-          console.log(res.data.data.token)
+        let res = await this.$axios.post('login', this.loginForm)
+        if (res.data.meta.status == 200) {
+          localStorage.setItem('token', res.data.data.token)
 
-          if (res.data.meta.status == 200) {
-            localStorage.setItem('token', res.data.data.token)
-
-            this.$message({
-              message: '登录成功',
-              type: 'success',
-              duration: 800
+          this.$message({
+            message: '登录成功',
+            type: 'success',
+            duration: 800
 
 
-            })
-            this.$router.push('/home')
-          }
-          else {
-            this.$message({
-              message: '登录失败',
-              type: 'error',
-              duration: 800
-            })
-          }
-        })
+          })
+          this.$router.push('/home')
+        }
+        else {
+          this.$message({
+            message: '登录失败',
+            type: 'error',
+            duration: 800
+          })
+        }
+        //  .then(res => {
+        //     console.log(res);
+        //     console.log(res.data.data.token)
+
+        //     if (res.data.meta.status == 200) {
+        //       localStorage.setItem('token', res.data.data.token)
+
+        //       this.$message({
+        //         message: '登录成功',
+        //         type: 'success',
+        //         duration: 800
+
+
+        //       })
+        //       this.$router.push('/home')
+        //     }
+        //     else {
+        //       this.$message({
+        //         message: '登录失败',
+        //         type: 'error',
+        //         duration: 800
+        //       })
+        //     }
+        //   })
       })
     },
 
