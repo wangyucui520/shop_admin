@@ -42,6 +42,7 @@
           size="mini"
           type="primary"
           icon="el-icon-edit"
+          @click="showEdit(scope.row)"
         ></el-button>
         <el-button
           size="mini"
@@ -88,6 +89,25 @@
     <div slot="footer" class="dialog-footer">
       <el-button @click="dialogaddVisible = false">取 消</el-button>
       <el-button type="primary" @click="addUser">确 定</el-button>
+    </div>
+  </el-dialog>
+  <!-- 编辑模态框 -->
+  <el-dialog title="编辑用户" :visible.sync="dialogEditUser">
+    <el-form :model="Editform" label-width="80px">
+      <el-form-item label="用户名">
+        <!-- <el-input v-model="Editform.username" autocomplete="off"></el-input> -->
+        <el-tag>{{ Editform.username }}</el-tag>
+      </el-form-item>
+      <el-form-item label="邮箱">
+        <el-input v-model="Editform.email" autocomplete="off"></el-input>
+      </el-form-item>
+      <el-form-item label="手机">
+        <el-input v-model="Editform.mobile" autocomplete="off"></el-input>
+      </el-form-item>
+    </el-form>
+    <div slot="footer" class="dialog-footer">
+      <el-button @click="dialogEditUser = false">取 消</el-button>
+      <el-button type="primary" @click="editUser">确 定</el-button>
     </div>
   </el-dialog>
 </div>

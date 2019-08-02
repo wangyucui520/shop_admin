@@ -29,6 +29,15 @@ export default {
         email: '',
         mobile: ''
       },
+      // 是否显示编辑对话框
+      dialogEditUser: false,
+      Editform: {
+        username: '翠姐',
+        email: '',
+        mobile: '',
+        id: 0
+      },
+
       rules: {
         username: [
           { required: true, message: '请输入正确的用户名', trigger: 'blur' },
@@ -184,6 +193,34 @@ export default {
       //     })
       //   }
       // })
+    },
+    // 显示编辑对话框
+    showEdit(row) {
+      this.dialogEditUser = true
+      console.log(row)
+      let { username, email, mobile, id } = row
+      this.Editform.username = username
+      this.Editform.email = email
+      this.Editform.mobile = mobile
+      this.Editform.id = id
+    },
+    //编辑用户
+    async editUser() {
+      const { id, email, mobile } = this.Editform
+      let res = await this.$axios.put(`users/${id}`, {
+        email,
+        mobile
+      })
+      console.log(res)
+      if (res.data.meta.status === 200) {
+        this.dialogEditUser = false
+        this.$message({
+          message: '更新成功',
+          type: 'success',
+          duration: 800
+        })
+        this.getUserName(this.pagenum, this.input3)
+      }
     }
   }
 }
