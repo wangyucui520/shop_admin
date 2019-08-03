@@ -124,14 +124,15 @@ export default {
         rids: keys.join(',')
       })
       console.log(res)
-      if (res.data.meta == 200) {
+      if (res.data.meta.status == 200) {
         this.dialogAssignRightsVisible = false
         this.$message({
           message: '角色授权成功',
           type: 'success',
           duration: 800
         })
-        this.loadAssign()
+        // 刷新整个角色列表
+        this.loadRolesDate()
       }
     }
   }
