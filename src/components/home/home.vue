@@ -17,7 +17,6 @@
             @click.prevent='loginout'
             href="#"
           >退出</a></el-col>
-
       </el-row>
     </el-header>
     <el-container>
@@ -33,47 +32,20 @@
           text-color="#fff"
           active-text-color="#ffd04b"
         >
-          <el-submenu index="1">
+          <el-submenu
+            :index="item1.id+''"
+            v-for="item1 in menusData"
+            :key='item1.id'
+          >
             <template slot="title">
               <i class="el-icon-location"></i>
-              <span>用户管理</span>
+              <span>{{item1.authName}}</span>
             </template>
-            <el-menu-item index="/users">用户列表</el-menu-item>
-
-          </el-submenu>
-          <el-submenu index="2">
-            <template slot="title">
-              <i class="el-icon-location"></i>
-              <span>权限管理</span>
-            </template>
-            <el-menu-item index="/roles">角色列表</el-menu-item>
-            <el-menu-item index="/rights">权限列表</el-menu-item>
-
-          </el-submenu>
-          <el-submenu index="3">
-            <template slot="title">
-              <i class="el-icon-location"></i>
-              <span>商品管理</span>
-            </template>
-            <el-menu-item index="3-1">商品列表</el-menu-item>
-            <el-menu-item index="3-2">分类参数</el-menu-item>
-            <el-menu-item index="3-3">商品分类</el-menu-item>
-
-          </el-submenu>
-          <el-submenu index="4">
-            <template slot="title">
-              <i class="el-icon-location"></i>
-              <span>订单管理</span>
-            </template>
-            <el-menu-item index="4-1">用户列表</el-menu-item>
-
-          </el-submenu>
-          <el-submenu index="5">
-            <template slot="title">
-              <i class="el-icon-location"></i>
-              <span>数据统计</span>
-            </template>
-            <el-menu-item index="5-1">数据列表</el-menu-item>
+            <el-menu-item
+              :index="'/'+item2.path"
+              v-for='item2 in item1.children'
+              :key='item2.id'
+            >{{item2.authName}}</el-menu-item>
           </el-submenu>
         </el-menu>
       </el-aside>
@@ -87,7 +59,25 @@
 
 <script>
 export default {
+  /* eslint-disable */
+  data () {
+    return {
+      // 数据信息
+      menusData: []
+    }
+  },
+  created () {
+    this.loadMenusData()
+  },
   methods: {
+    // 动态加载左侧列表
+    async loadMenusData () {
+      let res = await this.$axios.get('menus')
+      console.log(res);
+      this.menusData = res.data.data
+
+    },
+    // 退出登录
     async loginout () {
       try {
         await this.$confirm('此操作将退出该账户, 是否继续?', '提示', {
@@ -111,35 +101,15 @@ export default {
 
         })
       }
-
-
-
-
-      // this.$confirm('此操作将退出该账户, 是否继续?', '提示', {
-      //   confirmButtonText: '确定',
-      //   cancelButtonText: '取消',
-      //   type: 'warning'
-      // }).then(() => {
-      //   localStorage.removeItem('token')
-      //   this.$message({
-      //     type: 'success',
-      //     message: '退出成功!',
-      //     duration: 800
-
-      //   })
-      //   this.$router.push('/login')
-      // }).catch(() => {
-      //   this.$message({
-      //     message: '取消退出',
-      //     /* eslint-disable */
-      //     type: 'info'
-
-      //   })
-      // })
     },
     handUrlPath () {
+      if (this.$route.path === '/goods-add') {
+        return '/goods'
+      }
+
       return this.$route.path
     }
+
 
   }
 }
